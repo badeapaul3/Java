@@ -7,12 +7,14 @@
 package labs.pm.data;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Objects;
 
 import static java.math.RoundingMode.HALF_UP;
 
 
 
-public class Product {
+public abstract class Product {
     private int id;
     private String name;
     private BigDecimal price;
@@ -74,8 +76,33 @@ public class Product {
         return rating;
     }
 
-    public Product applyRating(Rating newRating){
-        return new Product(id, name, price, newRating);
+    public abstract Product applyRating(Rating newRating);
+    public LocalDate getBestBefore(){
+        return LocalDate.now();
     }
 
+    @Override
+    public String toString() {
+        return id +
+                ", " + name +
+                ", " + price +
+                ", " + getDiscount() +
+                ", " + rating.getStars() +
+                ", " + getBestBefore();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o instanceof Product) {
+            Product product = (Product) o;
+            return id == product.id && Objects.equals(name, product.name);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
