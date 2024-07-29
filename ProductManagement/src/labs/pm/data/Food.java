@@ -6,7 +6,7 @@ import java.time.LocalDate;
 /**
  * @author hatzp
  **/
-public class Food extends Product{
+public final class Food extends Product{
 
     private LocalDate bestBefore;
 
@@ -21,7 +21,7 @@ public class Food extends Product{
                 ? super.getDiscount() :BigDecimal.ZERO;
     }
 
-    public Food(int id, String name, BigDecimal price, Rating rating, LocalDate bestBefore) {
+    Food(int id, String name, BigDecimal price, Rating rating, LocalDate bestBefore) {
         super(id, name, price, rating);
         this.bestBefore = bestBefore;
     }
