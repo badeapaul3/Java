@@ -14,7 +14,7 @@ import static java.math.RoundingMode.HALF_UP;
 
 
 
-public sealed class Product permits Food,Drink{
+public sealed class Product implements Rateable<Product> permits Food,Drink{
     private int id;
     private String name;
     private BigDecimal price;
