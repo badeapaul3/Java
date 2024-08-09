@@ -23,6 +23,9 @@ public sealed class Product implements Rateable<Product> permits Food,Drink{
 
 
 
+
+
+
 //    public Product() {
 //        this(0,"no name",BigDecimal.ZERO);
 //    }
