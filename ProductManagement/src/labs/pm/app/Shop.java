@@ -23,11 +23,19 @@ public class Shop {
     public static void main(String[] args) {System.out.println("test");
         ProductManager pm = new ProductManager("en-GB");
 
+        pm.createProduct(103,"Cake", BigDecimal.valueOf(3.99),Rating.FIVE_STAR, LocalDate.now().plusDays(2));
+        pm.reviewProduct(103,Rating.THREE_STAR,"Decent");
+        pm.reviewProduct(103,Rating.TWO_STAR,"Decent");
+        pm.sendProductReportFile(101);
+        pm.sendProductReportFile(102);
+        pm.sendProductReportFile(103);
+
+
         //Product p1 = pm.createProduct(101,"Tea", BigDecimal.valueOf(1.99), Rating.NOT_RATED);
         //use parsing to create product with id 101 | 104 triggers DateTimeParseException
         //pm.parseProduct("D,101,Tea,1.99,0,2021-09-21");
         pm.parseProduct("D,101,Tea,1.99,0,2021-09-30");
-        pm.parseProduct("F,104,Cake,3.99,0,2021-09-34");
+        //pm.parseProduct("F,104,Cake,3.99,0,2021-09-34");
 
         //pm.printProductReport(101);
         pm.parseReview("101,4,Nice cup of tea - would recommend");
@@ -46,36 +54,45 @@ public class Shop {
 
         pm.reviewProduct(102,Rating.ONE_STAR,"Not worth");
         //pm.printProductReport(p2);
+        pm.sendProductReportFile(102);
 
-        Product p3 = pm.createProduct(103,"Cake", BigDecimal.valueOf(3.99),Rating.FIVE_STAR, LocalDate.now().plusDays(2));
-        //pm.printProductReport(p3);
-        System.out.println(p3.getRating());
+        pm.dumpData();
+        System.out.println("\n");
+        pm.restoreData();
 
-        pm.reviewProduct(103,Rating.FOUR_STAR,"decent");
-        //id 1 product does not exist - exception trigger
-        pm.reviewProduct(1,Rating.FOUR_STAR,"decent");
-
-        System.out.println(p3.getRating());
-        pm.sendProductReportFile(103);
-
-        pm.getDiscounts().forEach(
-                (rating,disc)-> System.out.println(rating+"\t"+disc)
-        );
-
-
+        pm.sendProductReportFile(101);
         pm.printProducts(p->p.getPrice().floatValue()<2,
                 (prod1,prod2) -> (prod2.getRating().ordinal() - prod1.getRating().ordinal()));
 
-        System.out.println("\n");
-
-
-//        pm.printProducts((prod1,prod2)-> prod2.getPrice().compareTo(prod1.getPrice()));
-
-        System.out.println("\n");
-
-        Comparator<Product> ratingSorter = (prod1,prod2)->prod2.getRating().ordinal() - prod1.getRating().ordinal();
-
-        Comparator<Product> priceSorter = (prod1,prod2)->prod2.getPrice().compareTo(prod1.getPrice());
+//        Product p3 = pm.createProduct(103,"Cake", BigDecimal.valueOf(3.99),Rating.FIVE_STAR, LocalDate.now().plusDays(2));
+//        //pm.printProductReport(p3);
+//        System.out.println(p3.getRating());
+//
+//        pm.reviewProduct(103,Rating.FOUR_STAR,"decent");
+//        //id 1 product does not exist - exception trigger
+//        pm.reviewProduct(1,Rating.FOUR_STAR,"decent");
+//
+//        System.out.println(p3.getRating());
+//        pm.sendProductReportFile(103);
+//
+//        pm.getDiscounts().forEach(
+//                (rating,disc)-> System.out.println(rating+"\t"+disc)
+//        );
+//
+//
+//        pm.printProducts(p->p.getPrice().floatValue()<2,
+//                (prod1,prod2) -> (prod2.getRating().ordinal() - prod1.getRating().ordinal()));
+//
+//        System.out.println("\n");
+//
+//
+////        pm.printProducts((prod1,prod2)-> prod2.getPrice().compareTo(prod1.getPrice()));
+//
+//        System.out.println("\n");
+//
+//        Comparator<Product> ratingSorter = (prod1,prod2)->prod2.getRating().ordinal() - prod1.getRating().ordinal();
+//
+//        Comparator<Product> priceSorter = (prod1,prod2)->prod2.getPrice().compareTo(prod1.getPrice());
 
 //        pm.printProducts(ratingSorter.thenComparing(priceSorter));
 //        System.out.println("\n");
