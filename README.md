@@ -1,2 +1,2 @@
 # Java
-Here will be located Java projects
+Shop Product Manager mini-app concept
