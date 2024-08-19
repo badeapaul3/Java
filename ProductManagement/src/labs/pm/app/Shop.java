@@ -11,11 +11,14 @@ import labs.pm.data.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * {@code Shop} class represents an app that manages Products
@@ -32,7 +35,7 @@ public class Shop {
         Callable<String> client = () -> {
             String clientId = "Client "+ clientCount.incrementAndGet();
             String threadName = Thread.currentThread().getName();
-            int productId = ThreadLocalRandom.current().nextInt()+101;
+            int productId = ThreadLocalRandom.current().nextInt(63)+101;
 
             String languageTag = ProductManager.getSupportedLocales()
                     .stream()
@@ -51,6 +54,8 @@ public class Shop {
             );
 
             Product product = pm.reviewProduct(productId, Rating.FOUR_STAR, "Another review 1");
+            pm.reviewProduct(productId, Rating.TWO_STAR, "Another review 2");
+            pm.reviewProduct(productId, Rating.THREE_STAR, "Another review 3");
 
             log.append((product!=null)
                    ? "\nProduct "+ productId+" reviewed\n"
@@ -67,6 +72,30 @@ public class Shop {
             log.append("\n-\tend of log\t-\n");
             return log.toString();
         };
+
+        List<Callable<String>> clients = Stream.generate(()->client)
+                .limit(5)
+                .collect(Collectors.toList());
+
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+
+        try {
+            List<Future<String>> results = executorService.invokeAll(clients);
+            executorService.shutdown();
+            results.stream().forEach(res ->{
+                try {
+                    System.out.println(res.get());
+                } catch (InterruptedException | ExecutionException e) {
+                    Logger.getLogger(Shop.class.getName()).log(Level.SEVERE,"Error retrieving client log", e);
+                }
+            });
+        } catch (InterruptedException e) {
+            Logger.getLogger(Shop.class.getName()).log(Level.SEVERE, "Error invoking clients", e);
+        }
+
+
+
+
 
 //        pm.createProduct(103,"Cake", BigDecimal.valueOf(3.99),Rating.FIVE_STAR, LocalDate.now().plusDays(2));
 //        pm.reviewProduct(103,Rating.THREE_STAR,"Decent");

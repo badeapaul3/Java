@@ -168,7 +168,7 @@ public class ProductManager {
 
         Path productFile = reportsFolder.resolve(MessageFormat.format(
                 config.getString("report.file"),product.getId(),client
-        ));
+                ));
 
         try(PrintWriter out = new PrintWriter(new OutputStreamWriter(Files.newOutputStream(productFile, StandardOpenOption.CREATE),"UTF-8"))
 
